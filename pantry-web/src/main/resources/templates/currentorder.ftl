@@ -1,26 +1,8 @@
 <#import "parts/common.ftl" as c>
 
 <@c.page>
-    <div class="form row">
-        <div class="form group col-md-6">
-            <form method="get" action="/currentorder" class="form-inline" >
-                <input type="text" name="filter" value="${filter?ifExists}" placeholder="Search by Name">
-                <button type="submit" class="btn btn-primary ml-2">Find Product</button>
-            </form>
-        </div>
-    </div>
-    <div class="form group mt-3">
-        <#assign currencyType = '₴'>
-        <#assign daysRow = 'days'>
-    <form  action ="/addProduct" method="post">
-        <input type="text" name="name" placeholder="Product Name: ">
-        <input type="number" name="amount" placeholder="amount: ">
-        <input type=number name="price" step=0.01 placeholder="price: ">
-        <input type="hidden" name="_csrf" value="${_csrf.token}" />
-        <button type="submit">Add to Order</button>
-    </form>
-    <div class="form row mt-3">
-    </div>
+    <#assign currencyType = '₴'>
+
     <table class="table">
         <thead>
         <tr>

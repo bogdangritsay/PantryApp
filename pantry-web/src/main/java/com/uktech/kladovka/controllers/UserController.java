@@ -1,9 +1,11 @@
 package com.uktech.kladovka.controllers;
 
 import com.uktech.kladovka.service.pantry.PantryService;
+import com.uktech.kladovka.service.pantry.RoleService;
 import com.uktech.kladovka.service.pantry.UserService;
 import com.uktech.pantry.domain.Role;
 import com.uktech.pantry.domain.User;
+import com.uktech.pantry.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +23,9 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private PantryService pantryService;
 
     @GetMapping
@@ -33,12 +38,10 @@ public class UserController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String saveUser( @RequestParam String username,
-            @RequestParam("userid") User user,
-                            @RequestParam Map<String, String> form)
-    {
-
-        userService.saveUser(user, username, form);
+    public String saveUser(@RequestParam String role,
+                            @RequestParam("userid") User user,
+                            @RequestParam Map<String, String> form) {
+        userService.saveUser(user, role);
         int count = pantryService.countPantries();
         if(count == 0) {
             pantryService.createDefaultPantry(user);
@@ -50,23 +53,21 @@ public class UserController {
     @GetMapping("{user}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String userEdit(@PathVariable User user,
-                           Model model )
-    {
+                           Model model ) {
         model.addAttribute("user", user);
-        model.addAttribute("roles", Role.values());
+        model.addAttribute("roles", roleService.findAll());
         return "userEdit";
     }
 
     @GetMapping("/profile")
-    public String getProfile(Model model, @AuthenticationPrincipal User user){
+    public String getProfile(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("username", user.getUsername());
         return "profile";
     }
 
     @PostMapping("/profile")
     public String updateProfile(@AuthenticationPrincipal User user,
-                                String password)
-    {
+                                String password) {
         userService.updateProfile(user, password);
         return "redirect:/user/profile";
     }

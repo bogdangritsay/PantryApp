@@ -14,37 +14,28 @@ import java.util.Set;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotBlank(message = "Username cannot be empty")
     private String username;
 
-    @NotBlank(message = "password cannot be empty")
+    @NotBlank(message = "Password cannot be empty")
     private String password;
 
     @Transient
-    @NotBlank(message = "password2 confirmation cannot be empty")
-    private String password2;
+    @NotBlank(message = "Password confirmation cannot be empty")
+    private String passwordConfirm;
+
     private boolean active;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name ="user_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
 
     @OneToMany(targetEntity = Pantry.class, mappedBy = "user")
     private Set<Pantry> pantries = new HashSet<>();
 
-
-    public User() {
-    }
-
-
-    public boolean isAdmin()
-    {
-        return roles.contains(Role.ADMIN);
-    }
+    public User() { }
 
     public long getId() {
         return id;
@@ -111,12 +102,19 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public String getPassword2() {
-        return password2;
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
     }
 
-    public void setPassword2(String password2) {
-        this.password2 = password2;
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public boolean isAdmin() {
+        for (Role role : roles) {
+            if (role.getName().equals("ROLE_ADMIN")) return true;
+        }
+        return false;
     }
 
 }

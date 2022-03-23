@@ -18,12 +18,12 @@ public class DataModelTest {
         pantryUser.setActive(true);
         pantryUser.setUsername("pantryUser");
         pantryUser.setPassword("test");
-        pantryUser.setPassword2("test");
+        pantryUser.setPasswordConfirm("test");
 
         assertEquals(0,  pantryUser.getRoles().size());
 
 
-        pantryUser.getRoles().add(Role.USER);
+        //pantryUser.getRoles().add(Role.USER);
 
         assertEquals(1, pantryUser.getRoles().size());
 
@@ -31,12 +31,12 @@ public class DataModelTest {
         User pantryAdmin = new User();
         pantryAdmin.setActive(true);
         pantryAdmin.setPassword("testAdmin");
-        pantryAdmin.setPassword2("testAdmin");
-        pantryAdmin.getRoles().add(Role.ADMIN);
+        pantryAdmin.setPasswordConfirm("testAdmin");
+        //pantryAdmin.getRoles().add(Role.ADMIN);
 
         User inactiveUser = new User();
         inactiveUser.setActive(false);
-        inactiveUser.getRoles().add(Role.USER);
+        //inactiveUser.getRoles().add(Role.USER);
 
 
 

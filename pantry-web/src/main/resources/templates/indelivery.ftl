@@ -1,4 +1,7 @@
 <#import "parts/common.ftl" as c>
+<#import "/spring.ftl" as spring/>
+
+
 
 <@c.page>
 <div class="form group mt-3">
@@ -64,6 +67,8 @@
             </div>
 
         </#list>
-    <#else> ${errorMessage} </#if>
+    <#else>
+        <@spring.message "message.no_in_delivery_orders"/>
+    </#if>
 </div>
 </@c.page>

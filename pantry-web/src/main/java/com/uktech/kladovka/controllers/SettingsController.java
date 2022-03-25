@@ -1,7 +1,6 @@
 package com.uktech.kladovka.controllers;
 
-import com.uktech.kladovka.service.pantry.SettingsService;
-import com.uktech.pantry.domain.Settings;
+import com.uktech.kladovka.service.pantry.UserService;
 import com.uktech.pantry.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,24 +15,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SettingsController {
 
     @Autowired
-    private SettingsService settingsService;
+    private UserService userService;
+
 
     @GetMapping("/settings")
     public String openSettings(@AuthenticationPrincipal User user,
-                               Model model)
-    {
-        Settings currentUserSetting = settingsService.getUserSettings(user.getId());
-        model.addAttribute("setting", currentUserSetting);
+                               Model model) {
         model.addAttribute("user" , user);
         return "settings";
     }
 
     @GetMapping("/settingEdit")
     public String editSettings(@AuthenticationPrincipal User user,
-                               Model model)
-    {
-        Settings currentUserSetting = settingsService.getUserSettings(user.getId());
-        model.addAttribute("setting", currentUserSetting);
+                               Model model) {
         model.addAttribute("user" , user);
         return "settingsEdit";
     }
@@ -43,28 +37,14 @@ public class SettingsController {
                                  @RequestParam String address,
                                  @RequestParam String email,
                                  @RequestParam String defaultSite,
-                                 @RequestParam String phone)
-    {
-        Settings userSettings = settingsService.getUserSettings(user.getId());
-
-        setDefaultValueIfNull(address, userSettings.getAddress());
-        setDefaultValueIfNull(email, userSettings.getEmail());
-        setDefaultValueIfNull(defaultSite, userSettings.getDefaultSite());
-        setDefaultValueIfNull(phone, userSettings.getPhone());
-
-        userSettings.setAddress(address);
-        userSettings.setEmail(email);
-        userSettings.setDefaultSite(defaultSite);
-        userSettings.setPhone(phone);
-        userSettings.setDefaultMaxPrice(2000.00);
-        settingsService.save(userSettings);
+                                 @RequestParam String phone) {
+        user.setAddress(address);
+        user.setEmail(email);
+        user.setDefaultSite(StringUtils.isEmpty(defaultSite) ? "No sites" : defaultSite);
+        user.setPhone(phone);
+        userService.saveUser(user);
 
         return "redirect:/settings";
     }
 
-    public void setDefaultValueIfNull(String updatedValue,  String deafaulValue) {
-        if(StringUtils.isEmpty(updatedValue)) {
-           updatedValue = deafaulValue;
-        }
-    }
 }

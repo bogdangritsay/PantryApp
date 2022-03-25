@@ -2,7 +2,6 @@ package com.uktech.kladovka.service.pantry;
 
 
 import com.uktech.pantry.domain.Role;
-import com.uktech.pantry.domain.Settings;
 import com.uktech.pantry.domain.User;
 import com.uktech.pantry.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,20 +9,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private  SettingsService settingsService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -39,7 +33,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public boolean addUser(User user, Settings settings, String role) {
+    public boolean addUser(User user, String role) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
@@ -50,8 +44,6 @@ public class UserService implements UserDetailsService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(true);
         userRepository.save(user);
-        settings.setUser(user);
-        settingsService.save(settings);
         return true;
     }
 
@@ -64,8 +56,8 @@ public class UserService implements UserDetailsService {
         return userFromDb.orElse(new User());
     }
 
-    public void saveUser(User user, String role) {
-       //write logic for saving existing user
+    public void saveUser(User user) {
+     userRepository.save(user);
     }
 
     public boolean deleteUser(Long userId) {

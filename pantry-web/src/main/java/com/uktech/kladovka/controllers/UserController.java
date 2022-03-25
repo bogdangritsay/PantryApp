@@ -41,11 +41,11 @@ public class UserController {
     public String saveUser(@RequestParam String role,
                             @RequestParam("userid") User user,
                             @RequestParam Map<String, String> form) {
-        userService.saveUser(user, role);
+       /* userService.saveUser(user, role);
         int count = pantryService.countPantries();
         if(count == 0) {
             pantryService.createDefaultPantry(user);
-        }
+        }*/
         return "redirect:/user";
 
     }

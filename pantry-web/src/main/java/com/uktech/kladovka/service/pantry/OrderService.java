@@ -13,10 +13,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
-
-    @Autowired
-    private SettingsService settingsService;
-
     @Autowired
     private OrderRepository orderRepository;
 
@@ -38,9 +34,7 @@ public class OrderService {
 
             orderRepository.save(activeOrder);
 
-            Settings userSettings = settingsService.getUserSettings(currentUser.getId());
-
-            emailService.sendSimpleEmail(userSettings.getEmail(), "PantryApp - Order " + activeOrder.getOrderName(), "Order " + activeOrder.getOrderName() + " has submitted!");
+            emailService.sendSimpleEmail(currentUser.getEmail(), "PantryApp - Order " + activeOrder.getOrderName(), "Order " + activeOrder.getOrderName() + " has submitted!");
 
             createDefaultOrderForUser(currentUser);
     }
@@ -98,18 +92,13 @@ public class OrderService {
     public void createOrder(User user) {
         //TODO move this part then uer tried to navigate to pantry????
         //or create def user
-        long userID = 15L;
+/*        long userID = 15L;
         if (user != null) {
             userID = user.getId();
         }
 
-        Settings userSettings = settingsService.getUserSettings(userID);
-
         Order order = new Order(userID, "http://testlink.com", OrderStatus.ACTIVE);
-        if(!userSettings.isEmpty())
-        {
-            order.setMaxPrice(userSettings.getDefaultMaxPrice()); //default price 220k
-        }
+        order.setMaxPrice(userSettings.getDefaultMaxPrice()); //default price 220k
         order.setTotalOrderPrice(0.00);
 
         //try to find a better way for id generation
@@ -119,7 +108,7 @@ public class OrderService {
         order.setOrderName("order " + orderID);
 
         orderItemService.createNewEmptyOrderDetails(order);
-        saveOrder(order);
+        saveOrder(order);*/
     }
 
     public void removeOrderItemFromOrder(Long id, Long orderId) {
@@ -243,9 +232,8 @@ public class OrderService {
     }
 
     public Order createDefaultOrderForUser(User user) {
-        Settings userSettings = settingsService.getUserSettings(user.getId());
-        Double userMaxPrice = userSettings.getDefaultMaxPrice();
-        Order order = new Order("", null, user.getId(), OrderStatus.ACTIVE, userMaxPrice == null ? 500 /* Default Max Price */ : userMaxPrice);
+        Double userMaxPrice = user.getDefaultMaxPrice();
+        Order order = new Order("", null, user.getId(), OrderStatus.ACTIVE, userMaxPrice);
         order.setOrderStatus(OrderStatus.ACTIVE);
         order.setTotalOrderPrice(0.00);
         orderRepository.save(order);

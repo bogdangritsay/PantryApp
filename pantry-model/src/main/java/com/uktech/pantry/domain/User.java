@@ -1,6 +1,5 @@
 package com.uktech.pantry.domain;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,22 +11,21 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @NotBlank(message = "Username cannot be empty")
+    private boolean active;
     private String username;
-
-    @NotBlank(message = "Password cannot be empty")
     private String password;
-
+    // User settings
+    private String address = "No address";
+    private String email;
+    private String defaultSite = "No site";
+    private String phone;
+    private Double defaultMaxPrice = 500D;
     @Transient
-    @NotBlank(message = "Password confirmation cannot be empty")
     private String passwordConfirm;
 
-    private boolean active;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
@@ -108,6 +106,47 @@ public class User implements UserDetails {
 
     public String getPasswordConfirm() {
         return passwordConfirm;
+    }
+
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDefaultSite() {
+        return defaultSite;
+    }
+
+    public void setDefaultSite(String defaultSite) {
+        this.defaultSite = defaultSite;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Double getDefaultMaxPrice() {
+        return defaultMaxPrice;
+    }
+
+    public void setDefaultMaxPrice(Double defaultMaxPrice) {
+        this.defaultMaxPrice = defaultMaxPrice;
     }
 
     public boolean isAdmin() {

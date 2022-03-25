@@ -20,9 +20,6 @@ public class DeliveryController {
     private final String errorMessage = "You don't have any order In Delivery!";
 
     @Autowired
-    private SettingsService settingsService;
-
-    @Autowired
     private OrderService orderService;
 
     @Autowired
@@ -40,16 +37,14 @@ public class DeliveryController {
     @GetMapping("/indelivery")
     public String getProductsInDelivery(@AuthenticationPrincipal User user, Model model) {
         List<Order> ordersInDelivery = orderService.findOrderByStatus(OrderStatus.IN_DELIVERY, user.getId());
-        Settings userSettings = settingsService.getUserSettings(user.getId());
         OrderByDateComparator comparator = new OrderByDateComparator();
         TreeSet<Order> orders = new TreeSet<>(comparator);
         orders.addAll(ordersInDelivery);
 
-
         if (ordersInDelivery != null && ordersInDelivery.size() != 0) {
             model.addAttribute("orders", orders);
 
-            String shippingAddress = userSettings.getAddress();
+            String shippingAddress = user.getAddress();
             if (shippingAddress == null)
                 shippingAddress  = "No delivery address yet";
 

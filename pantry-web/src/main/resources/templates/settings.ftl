@@ -7,10 +7,10 @@
     <form  method="get" action="/settings">
         <ul class="list-group">
             <li class="list-group-item disabled">${user.username}</li>
-            <li class="list-group-item">${setting.address}</li>
-            <li class="list-group-item">${setting.defaultSite}</li>
-            <li class="list-group-item">${setting.email}</li>
-            <li class="list-group-item">${setting.phone}</li>
+            <li class="list-group-item">${user.address}</li>
+            <li class="list-group-item">${user.defaultSite}</li>
+            <li class="list-group-item">${user.email}</li>
+            <li class="list-group-item">${user.phone}</li>
             <a href="/settingEdit" class="list-group-item list-group-item-action">Edit</a>
         </ul>
     </form>

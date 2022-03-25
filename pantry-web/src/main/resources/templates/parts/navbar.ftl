@@ -1,6 +1,4 @@
 <#include "security.ftl">
-<#import "login.ftl" as l>
-
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <div class="container-fluid">
@@ -56,7 +54,10 @@
 
         </div>
         <#else>
-        <@l.loginbtn />
+            <form class="d-flex" action="/login" method="post">
+                <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                <button class="btn btn-primary" type="submit">Sign In</button>
+            </form>
         </#if>
     </div>
 </nav>

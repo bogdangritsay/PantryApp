@@ -1,6 +1,7 @@
 package com.uktech.kladovka.controllers;
 
 import com.uktech.kladovka.service.pantry.UserService;
+import com.uktech.pantry.domain.Settings;
 import com.uktech.pantry.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(@ModelAttribute("userForm") @Valid User userForm, String role, BindingResult bindingResult, Model model) {
+    public String addUser(@Valid User userForm, @Valid Settings settingsForm, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             return "registration";
@@ -36,7 +37,7 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Passwords should be the same");
             return "registration";
         }
-        if (!userService.addUser(userForm, "ROLE_USER")) {
+        if (!userService.addUser(userForm, settingsForm, "ROLE_USER")) {
             model.addAttribute("usernameError", "This user already exists!");
             return "registration";
         }

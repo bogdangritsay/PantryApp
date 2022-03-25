@@ -2,6 +2,7 @@ package com.uktech.kladovka.service.pantry;
 
 
 import com.uktech.pantry.domain.Role;
+import com.uktech.pantry.domain.Settings;
 import com.uktech.pantry.domain.User;
 import com.uktech.pantry.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
+    private  SettingsService settingsService;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -35,7 +39,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public boolean addUser(User user, String role) {
+    public boolean addUser(User user, Settings settings, String role) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
@@ -44,7 +48,10 @@ public class UserService implements UserDetailsService {
 
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setActive(true);
         userRepository.save(user);
+        settings.setUser(user);
+        settingsService.save(settings);
         return true;
     }
 

@@ -63,8 +63,7 @@ public class SettingsController {
     }
 
     public void setDefaultValueIfNull(String updatedValue,  String deafaulValue) {
-        if(StringUtils.isEmpty(updatedValue))
-        {
+        if(StringUtils.isEmpty(updatedValue)) {
            updatedValue = deafaulValue;
         }
     }

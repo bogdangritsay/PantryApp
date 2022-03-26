@@ -34,7 +34,7 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Passwords should be the same");
             return "registration";
         }
-        if (!userService.addUser(userForm, "ROLE_USER")) {
+        if (!userService.addUser(userForm)) {
             model.addAttribute("usernameError", "This user already exists!");
             return "registration";
         }

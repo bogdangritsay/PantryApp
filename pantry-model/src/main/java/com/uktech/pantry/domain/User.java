@@ -150,8 +150,15 @@ public class User implements UserDetails {
     }
 
     public boolean isAdmin() {
+        System.out.println("is admin?");
+        System.out.println(roles);
+
         for (Role role : roles) {
-            if (role.getName().equals("ROLE_ADMIN")) return true;
+            System.out.println(role.getName());
+            if (role.getName().equals("ROLE_ADMIN")) {
+                return true;
+            }
+
         }
         return false;
     }

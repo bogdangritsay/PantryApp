@@ -30,8 +30,8 @@
                                     <input type="password" name="password" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Password" required />
                                 </div>
                                 <div class="custom-control custom-checkbox mb-3">
-                                    <input id="customCheck1" type="checkbox" checked class="custom-control-input">
-                                    <label for="customCheck1" class="custom-control-label">Remember password</label>
+                                    <input id="rememberMe" type="checkbox" class="custom-control-input" name="remember-user">
+                                    <label for="rememberMe" class="custom-control-label">Remember Me</label>
                                 </div>
                                 <input type="hidden" name="_csrf" value="${_csrf.token}" />
                                 <button class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm" type="submit">Sign In</button>

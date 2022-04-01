@@ -38,6 +38,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/login")
                     .permitAll()
                     .and()
+                    .rememberMe()
+                    .rememberMeCookieName("remember-user")
+                    .rememberMeParameter("remember-user")
+                    .and()
                 .logout()
                     .permitAll();
 

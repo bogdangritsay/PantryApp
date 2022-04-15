@@ -1,29 +1,46 @@
 package com.uktech.kladovka.service;
 
+import com.uktech.kladovka.service.mail.EmailSender;
 import com.uktech.kladovka.service.mail.EmailValidator;
+import com.uktech.kladovka.service.mail.templates.ConfirmationEmail;
+import com.uktech.kladovka.service.mail.token.ConfirmationTokenService;
 import com.uktech.kladovka.service.pantry.UserService;
+import com.uktech.pantry.domain.ConfirmationToken;
 import com.uktech.pantry.domain.Role;
 import com.uktech.pantry.domain.User;
 
-import lombok.AllArgsConstructor;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+
 @Service
-@AllArgsConstructor
 public class RegistrationService {
+    private final String EMAIL_NOT_VALID_MSG = "Email not valid";
+    private final String EMAIL_ALREADY_CONFIRMED_MSG = "Email already confirmed";
+    private final String TOKEN_EXPIRED_MSG = "Token expired";
+    private final String CONFIRM_YOUR_EMAIL_HDR = "PantryApp - Confirm your email";
+    //TODO: change to universal
+    private String confirmationLink = "http://localhost:8282/registration/confrim?token=";
+    @Autowired
+    private EmailValidator emailValidator;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ConfirmationTokenService confirmationTokenService;
+    @Autowired
+    private EmailSender emailSender;
 
-    private final EmailValidator emailValidator;
-    private final UserService userService;
 
-    public boolean register(User user) {
+    public String register(User user) {
         boolean isEmailValid = emailValidator.test(user.getEmail());
 
         if (!isEmailValid) {
-            throw new IllegalStateException("Email not valid");
+            throw new IllegalStateException(EMAIL_NOT_VALID_MSG);
         }
 
-        return userService.signUpUser(
+        String token =  userService.signUpUser(
                 new User(
                         user.getFirstName(),
                         user.getLastName(),
@@ -39,5 +56,34 @@ public class RegistrationService {
                         null
         )
         );
+
+        confirmationLink+= token;
+        emailSender.sendEmail(
+                user.getEmail(),
+                CONFIRM_YOUR_EMAIL_HDR,
+                ConfirmationEmail.buildConfirmationEmail(user.getFullName(), confirmationLink)
+        );
+        return token;
     }
+
+    @Transactional
+    public void  confirmToken(String token) {
+        ConfirmationToken confirmationToken = confirmationTokenService.getToken(token);
+
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException(EMAIL_ALREADY_CONFIRMED_MSG);
+        }
+
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException(TOKEN_EXPIRED_MSG);
+        }
+
+        confirmationTokenService.setConfirmedAt(token);
+        userService.enableAppUser(
+                confirmationToken.getUser().getEmail());
+    }
+
+
 }

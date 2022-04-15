@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,7 +22,6 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
@@ -29,8 +29,8 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private Boolean locked;
-    private Boolean enabled;
+    private Boolean locked = false;
+    private Boolean enabled = false;
 
     // User custom settings
     private String firstName;
@@ -96,8 +96,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        //return locked;
-        return true;
+        return locked;
     }
 
     @Override
@@ -107,8 +106,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        //return enabled;
-        return true;
+        return enabled;
     }
 
 
@@ -126,5 +124,13 @@ public class User implements UserDetails {
 
     public String getMiddleName() {
         return middleName;
+    }
+
+    public String getFullName() {
+        String fullName = getLastName() + ", " + getFirstName();
+        if (middleName != null) {
+            fullName+= " " + middleName;
+        }
+        return fullName;
     }
 }

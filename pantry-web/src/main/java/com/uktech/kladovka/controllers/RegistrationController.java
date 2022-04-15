@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 
@@ -26,19 +27,13 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String register(@Valid User userForm, BindingResult bindingResult, Model model) {
+        registrationService.register(userForm);
+        return "redirect:/login";
+    }
 
-        if (bindingResult.hasErrors()) {
-            return "registration";
-        }
-        if (!userForm.getPassword().equals(userForm.getPasswordConfirm())) {
-            model.addAttribute("passwordError", "Passwords should be the same");
-            return "registration";
-        }
-        if (!registrationService.register(userForm)) {
-            model.addAttribute("emailError", "This user already exists!");
-            return "registration";
-        }
-
-        return "redirect:/";
+    @GetMapping("/registration/confirm")
+    public String confirm(@RequestParam("token") String token) {
+        registrationService.confirmToken(token);
+        return "redirect:/login";
     }
 }

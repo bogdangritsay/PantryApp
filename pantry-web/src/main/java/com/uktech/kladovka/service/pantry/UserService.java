@@ -3,6 +3,8 @@ package com.uktech.kladovka.service.pantry;
 
 
 
+import com.uktech.kladovka.service.mail.token.ConfirmationTokenService;
+import com.uktech.pantry.domain.ConfirmationToken;
 import com.uktech.pantry.domain.User;
 import com.uktech.pantry.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -22,13 +25,15 @@ public class UserService implements UserDetailsService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ConfirmationTokenService confirmationTokenService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
     }
 
-    public boolean signUpUser(User user) {
+    public String signUpUser(User user) {
         boolean userExists = userRepository
                 .findByEmail(user.getEmail())
                 .isPresent();
@@ -41,11 +46,20 @@ public class UserService implements UserDetailsService {
 
         user.setPassword(encodedPassword);
 
-        //TODO: Send confirmation token
-
         userRepository.save(user);
 
-        return true;
+        String token = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                user
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        return token;
     }
 
 
@@ -75,5 +89,9 @@ public class UserService implements UserDetailsService {
             user.setPassword(password);
             userRepository.save(user);
         }
+    }
+
+    public int enableAppUser(String email) {
+        return userRepository.enableAppUser(email);
     }
 }

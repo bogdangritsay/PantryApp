@@ -1,7 +1,7 @@
 package com.uktech.kladovka.service.pantry;
 
 
-import com.uktech.kladovka.service.mail.DefaultEmailService;
+import com.uktech.kladovka.service.mail.EmailService;
 import com.uktech.pantry.domain.*;
 import com.uktech.pantry.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class OrderService {
     private OrderItemService orderItemService;
 
     @Autowired
-    private DefaultEmailService emailService;
+    private EmailService emailService;
 
 
     public void submitOrder(Order activeOrder, User currentUser) {
@@ -34,7 +34,8 @@ public class OrderService {
 
             orderRepository.save(activeOrder);
 
-            emailService.sendSimpleEmail(currentUser.getEmail(), "PantryApp - Order " + activeOrder.getOrderName(), "Order " + activeOrder.getOrderName() + " has submitted!");
+            //TODO: fix that
+            //emailService.sendSimpleEmail(currentUser.getEmail(), "PantryApp - Order " + activeOrder.getOrderName(), "Order " + activeOrder.getOrderName() + " has submitted!");
 
             createDefaultOrderForUser(currentUser);
     }

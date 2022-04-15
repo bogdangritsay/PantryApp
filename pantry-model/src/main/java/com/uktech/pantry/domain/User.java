@@ -1,23 +1,41 @@
 package com.uktech.pantry.domain;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
+@Setter
+@EqualsAndHashCode
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
+
+    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private boolean active;
-    private String username;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+    private Long id;
     private String password;
-    // User settings
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    private Boolean locked;
+    private Boolean enabled;
+
+    // User custom settings
+    private String firstName;
+    private String lastName;
+    private String middleName;
     private String address = "No address";
     private String email;
     private String defaultSite = "No site";
@@ -25,26 +43,50 @@ public class User implements UserDetails {
     private Double defaultMaxPrice = 500D;
     @Transient
     private String passwordConfirm;
-
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
-
     @OneToMany(targetEntity = Pantry.class, mappedBy = "user")
     private Set<Pantry> pantries = new HashSet<>();
 
-    public User() { }
+    public User(
+            String firstName,
+            String lastName,
+            String middleName,
+            String password,
+            Role role,
+            String address,
+            String email,
+            String defaultSite,
+            String phone,
+            String passwordConfirm,
+            Set<Pantry> pantries
+    ) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.middleName = middleName;
+        this.password = password;
+        this.role = role;
+        this.address = address;
+        this.email = email;
+        this.defaultSite = defaultSite;
+        this.phone = phone;
 
-    public long getId() {
-        return id;
+        this.passwordConfirm = passwordConfirm;
+        this.pantries = pantries;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
+        return Collections.singletonList(authority);
     }
 
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
@@ -54,6 +96,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
+        //return locked;
         return true;
     }
 
@@ -64,103 +107,24 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isActive();
+        //return enabled;
+        return true;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
-
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getDefaultSite() {
-        return defaultSite;
-    }
-
-    public void setDefaultSite(String defaultSite) {
-        this.defaultSite = defaultSite;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Double getDefaultMaxPrice() {
-        return defaultMaxPrice;
-    }
-
-    public void setDefaultMaxPrice(Double defaultMaxPrice) {
-        this.defaultMaxPrice = defaultMaxPrice;
-    }
 
     public boolean isAdmin() {
-        System.out.println("is admin?");
-        System.out.println(roles);
-
-        for (Role role : roles) {
-            System.out.println(role.getName());
-            if (role.getName().equals("ROLE_ADMIN")) {
-                return true;
-            }
-
-        }
-        return false;
+        return "ADMIN".equals(role.name());
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
 }

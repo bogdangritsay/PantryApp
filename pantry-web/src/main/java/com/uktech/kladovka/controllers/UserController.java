@@ -1,11 +1,8 @@
 package com.uktech.kladovka.controllers;
 
 import com.uktech.kladovka.service.pantry.PantryService;
-import com.uktech.kladovka.service.pantry.RoleService;
 import com.uktech.kladovka.service.pantry.UserService;
-import com.uktech.pantry.domain.Role;
 import com.uktech.pantry.domain.User;
-import com.uktech.pantry.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Map;
 
 @Controller
@@ -22,16 +20,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private RoleService roleService;
 
     @Autowired
     private PantryService pantryService;
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String userList(Model model)
-    {
+    public String userList(Model model) {
         model.addAttribute("users" , userService.findAll());
         return "userList";
     }
@@ -55,7 +50,7 @@ public class UserController {
     public String userEdit(@PathVariable User user,
                            Model model ) {
         model.addAttribute("user", user);
-        model.addAttribute("roles", roleService.findAll());
+        model.addAttribute("roles", Collections.singleton(user.getRole()));
         return "userEdit";
     }
 

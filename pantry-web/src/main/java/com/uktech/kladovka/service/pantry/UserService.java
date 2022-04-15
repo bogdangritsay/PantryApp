@@ -2,8 +2,8 @@ package com.uktech.kladovka.service.pantry;
 
 
 
+
 import com.uktech.pantry.domain.User;
-import com.uktech.pantry.repository.RoleRepository;
 import com.uktech.pantry.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,38 +17,37 @@ import java.util.*;
 
 @Service
 public class UserService implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private RoleRepository roleRepository;
-
+    private static final String USER_NOT_FOUND_MSG = "User %s is not found!";
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(name);
-
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        return user;
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
     }
 
-    public boolean addUser(User user) {
-        User userFromDB = userRepository.findByUsername(user.getUsername());
+    public boolean signUpUser(User user) {
+        boolean userExists = userRepository
+                .findByEmail(user.getEmail())
+                .isPresent();
 
-        if (userFromDB != null) {
-            return false;
+        if (userExists) {
+            throw new IllegalStateException("Email already exists");
         }
 
-        user.setRoles(Collections.singleton(roleRepository.findByName("ROLE_USER")));
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setActive(true);
+        String encodedPassword =  bCryptPasswordEncoder.encode(user.getPassword());
+
+        user.setPassword(encodedPassword);
+
+        //TODO: Send confirmation token
+
         userRepository.save(user);
+
         return true;
     }
+
 
     public List<User> findAll() {
         return userRepository.findAll();

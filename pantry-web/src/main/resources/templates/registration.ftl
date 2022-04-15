@@ -24,10 +24,16 @@
                             <p class="text-muted mb-4">All fields are required!</p>
                             <form action="/registration" method="post">
                                 <div class="form-group mb-3">
-                                    <input type="text" name="username" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Username" required autofocus/>
+                                    <input type="email" name="email" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Email" required autofocus/>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <input type="email" name="email" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Email" required />
+                                    <input type="text" name="lastName" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Last Name" required />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <input type="text" name="firstName" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="First Name" required />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <input type="text" name="middleName" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Middle Name" />
                                 </div>
                                 <div class="form-group mb-3">
                                     <input type="text" name="phone" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Phone number" required />

@@ -22,7 +22,7 @@ public class RegistrationService {
     private final String TOKEN_EXPIRED_MSG = "Token expired";
     private final String CONFIRM_YOUR_EMAIL_HDR = "PantryApp - Confirm your email";
     //TODO: change to universal
-    private String confirmationLink = "http://localhost:8282/registration/confrim?token=";
+    private String confirmationLink = "http://localhost:8282/registration/confirm?token=";
     @Autowired
     private EmailValidator emailValidator;
     @Autowired
@@ -81,8 +81,7 @@ public class RegistrationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        userService.enableAppUser(
-                confirmationToken.getUser().getEmail());
+        userService.enableAppUser(confirmationToken.getUser().getEmail());
     }
 
 

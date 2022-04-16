@@ -1,7 +1,7 @@
 package com.uktech.kladovka.service.pantry;
 
 
-import com.uktech.kladovka.service.mail.DefaultEmailService;
+import com.uktech.kladovka.service.mail.EmailService;
 import com.uktech.pantry.domain.*;
 import com.uktech.pantry.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
+    private final String SUBMITTED_ORDER_EMAIL_TEMPLATE = "submitted_order.ftl";
+
     @Autowired
     private OrderRepository orderRepository;
 
@@ -23,7 +25,8 @@ public class OrderService {
     private OrderItemService orderItemService;
 
     @Autowired
-    private DefaultEmailService emailService;
+    private EmailService emailService;
+
 
 
     public void submitOrder(Order activeOrder, User currentUser) {
@@ -34,7 +37,12 @@ public class OrderService {
 
             orderRepository.save(activeOrder);
 
-            emailService.sendSimpleEmail(currentUser.getEmail(), "PantryApp - Order " + activeOrder.getOrderName(), "Order " + activeOrder.getOrderName() + " has submitted!");
+            Map<String, Object> model = new HashMap();
+            model.put("name", currentUser.getFirstName());
+            model.put("title", "Order " + activeOrder.getOrderName() + " has submitted!");
+            model.put("order", activeOrder);
+
+            emailService.sendEmail(currentUser.getEmail(),"[PantryApp] Order " + activeOrder.getOrderName() + " has submitted!", SUBMITTED_ORDER_EMAIL_TEMPLATE, model);
 
             createDefaultOrderForUser(currentUser);
     }

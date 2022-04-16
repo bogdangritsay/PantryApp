@@ -24,7 +24,7 @@
                             <p class="text-muted mb-4">Enter your username and password.</p>
                             <form action="/login" method="post">
                                 <div class="form-group mb-3">
-                                    <input type="text" name="username" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Username" required autofocus/>
+                                    <input type="email" name="email" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Email" required autofocus/>
                                 </div>
                                 <div class="form-group mb-3">
                                     <input type="password" name="password" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Password" required />

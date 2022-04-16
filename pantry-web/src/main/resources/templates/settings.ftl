@@ -6,7 +6,7 @@
 <div class="form group mt-3">
     <form  method="get" action="/settings">
         <ul class="list-group">
-            <li class="list-group-item disabled">${user.lastName}, ${user.firstName} <#if user.middleName?? > ${user.middleName}</#if></li>
+            <li class="list-group-item disabled">${user.firstName} ${user.lastName} <#if user.middleName??>, ${user.middleName}</#if></li>
             <li class="list-group-item">${user.address}</li>
             <li class="list-group-item">${user.defaultSite}</li>
             <li class="list-group-item">${user.email}</li>

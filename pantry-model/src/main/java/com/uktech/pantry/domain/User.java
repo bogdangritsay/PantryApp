@@ -127,9 +127,9 @@ public class User implements UserDetails {
     }
 
     public String getFullName() {
-        String fullName = getLastName() + ", " + getFirstName();
+        String fullName = getFirstName() + getLastName();
         if (middleName != null) {
-            fullName+= " " + middleName;
+            fullName+= ", " + middleName;
         }
         return fullName;
     }

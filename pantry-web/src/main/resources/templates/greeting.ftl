@@ -3,7 +3,7 @@
 <#include "parts/security.ftl">
 
 <@c.page>
-<h5>Hello, <#if  user?has_content>${name}<#else> Guest </#if></h5>
+<h5>Hello, <#if  user?has_content>${user.firstName}<#else> Guest </#if></h5>
 <@spring.message "message.greeting"/>
 
 <div>This application will help you with ordering household goods and household chemicals for regular use!</div>

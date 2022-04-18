@@ -6,6 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#passwordConfirm').keyup(function() {
+                var password = $("#password").val();
+                var passwordConfirm = $("#passwordConfirm").val();
+
+                if (password != passwordConfirm) {
+                    $('#errorBlock').css('display', 'block').html('Passwords do not match');
+                    $('#sbmBtn').prop('disabled', true);
+                } else {
+                    $('#errorBlock').css('display', 'none').html('');
+                    $('#sbmBtn').prop('disabled', false);
+
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="container-fluid">
@@ -21,7 +39,7 @@
                     <div class="row">
                         <div class="col-lg-10 col-xl-7 mx-auto">
                             <h3 class="display-4">Create a new account</h3>
-                            <p class="text-muted mb-4">All fields are required!</p>
+                            <p class="text-muted mb-4">Please fill in the fields below</p>
                             <form action="/registration" method="post">
                                 <div class="form-group mb-3">
                                     <input type="email" name="email" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Email" required autofocus/>
@@ -39,14 +57,15 @@
                                     <input type="text" name="phone" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Phone number" required />
                                 </div>
                                 <div class="form-group mb-3">
-                                    <input type="password" name="password" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Password" required />
+                                    <input type="password" name="password" id="password" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Password" required />
                                 </div>
                                 <div class="form-group mb-3">
-                                    <input type="password" name="passwordConfirm" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Password Confirmation" required />
+                                    <input type="password" name="passwordConfirm" id="passwordConfirm" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Password Confirmation" required />
                                 </div>
+                                <div id="errorBlock" class="alert alert-danger" style="display: none"></div>
 
                                 <input type="hidden" name="_csrf" value="${_csrf.token}" />
-                                <button class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm" type="submit">Sign Up</button>
+                                <button class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm" id="sbmBtn" type="submit" disabled>Sign Up</button>
 
                                 <div class="text-center d-flex justify-content-between mt-4">
                                     <p class="font-italic text-muted"><u>Pantry Helper</u></p>
@@ -55,10 +74,10 @@
                             </form>
                         </div>
                     </div>
-                </div><!-- End -->
+                </div>
 
             </div>
-        </div><!-- End -->
+        </div>
 
     </div>
 </div>

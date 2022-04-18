@@ -7,23 +7,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#passwordConfirm').keyup(function() {
-                var password = $("#password").val();
-                var passwordConfirm = $("#passwordConfirm").val();
-
-                if (password != passwordConfirm) {
-                    $('#errorBlock').css('display', 'block').html('Passwords do not match');
-                    $('#sbmBtn').prop('disabled', true);
-                } else {
-                    $('#errorBlock').css('display', 'none').html('');
-                    $('#sbmBtn').prop('disabled', false);
-
-                }
-            });
-        });
-    </script>
+    <script src="js/passwordConfirmation.js" type="application/javascript"></script>
 </head>
 <body>
 <div class="container-fluid">

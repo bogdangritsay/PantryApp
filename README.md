@@ -14,9 +14,10 @@ git pull origin master
 ```
 
 ## How to run web application?
-1. Open this folder ad Intellij IDEA project.
+1. Open this folder as Intellij IDEA project.
 2. Navigate to <YOUR_ROOT_DIRECTORY>\pantry-web\src\main\resources
-3. Change rows below to your DB url and credentials. Also you can specify prticular database after port.
+3. Change rows below to your DB url and credentials. 
+   Also you can specify particular database after port.
 ```
 spring.datasource.url=jdbc:postgresql://localhost:5432/
 spring.datasource.username=postgres

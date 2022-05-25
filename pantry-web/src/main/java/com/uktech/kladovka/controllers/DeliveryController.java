@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -57,7 +59,13 @@ public class DeliveryController {
     }
 
     @PostMapping("/delivered")
-    public String delivered(@AuthenticationPrincipal User user, Model model) {/*
+    public String delivered(@RequestParam Long deliveredOrderId, @AuthenticationPrincipal User user, Model model) {
+        Order deliveredOrder = orderService.findOrderById(deliveredOrderId);
+        deliveredOrder.setOrderStatus(OrderStatus.COMPLETED);
+        deliveredOrder.setDeliveryDate(LocalDateTime.now());
+        orderService.saveOrder(deliveredOrder);
+
+        /*
         Pantry pCurrentPantry = pantryService.getPCurrentPantry(user);
         Order orderInDelivery = orderService.findActiveOrder(OrderStatus.COMPLETED, user.getId());
         if(null != orderInDelivery)

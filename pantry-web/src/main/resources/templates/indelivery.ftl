@@ -16,6 +16,7 @@
                         <p>Shipping Address: <br> ${shippingAddress}</p>
                     </div>
                     <div class="float-end">
+                        <h6 class="card-subtitle mb-2" style="color: dodgerblue">${order.getOrderStatus()}</h6>
                         <h6 class="card-subtitle mb-2 text-muted">${order.getDateOfSubmitInSimpleFormat()}</h6>
                         Total
                         <h2><#if order?has_content>${(order.totalOrderPrice)?string(",##0.00")} ${currencyType} <#else> 0,00${currencyType} </#if></h2>

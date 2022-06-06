@@ -38,7 +38,7 @@
                                         <#list order.getOrderDetails() as item>
                                             <tr>
                                                 <td>${item?index+1}</td>
-                                                <td>${item.product.name}</td>
+                                                <td><a href="${item.product.linkToProduct}" target="_blank">${item.product.name}</a></td>
                                                 <td>${item.orderAmount}</td>
                                                 <td>${currencyType} ${(item.product.itemPrice)?string(",##0.00")}</td>
                                                 <td>${currencyType} ${(item.totalPrice)?string(",##0.00")}</td>

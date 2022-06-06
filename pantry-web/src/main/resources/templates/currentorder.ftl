@@ -34,22 +34,21 @@
                 </td>
             </tr>
             </#list>
+            <tr>
+                <td colspan="4">
+                    <form  action ="/submitorder" method="post" onsubmit="validate_form()">
+                        <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Order</button>
+                    </form>
+                </td>
+                <td colspan="3">
+                    <h4 style="font-weight: bold">${currencyType} ${((order.totalOrderPrice)?string(",##0.00"))!"0.00"} UAH </h4>
+                </td>
+            </tr>
         <#else>
             <tr> <td colspan="7">No Products</td></tr>
         </#if>
         </tbody>
     </table>
-    <div class="form row">
-        <p align="left" >
-        <p class="font-weight-bold">TOTAL: </p>
-        <p class="font-weight-bold">${currencyType} ${((order.totalOrderPrice)?string(",##0.00"))!"0.00"} UAH </p>
-    </div>
-    <#if items?hasContent>
-        <div class="form row" >
-            <form  action ="/submitorder" method="post" onsubmit="validate_form()">
-                <input type="hidden" name="_csrf" value="${_csrf.token}" />
-                <button type="submit">Submit Order</button>
-            </form>
-        </div>
-    </#if>
+
 </@c.page>

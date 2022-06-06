@@ -44,12 +44,10 @@ public class ProductCatalogController {
                                     @AuthenticationPrincipal User user,
                                     Model model) {
         Product product = productService.findById(id);
-        System.out.println(product.getName());
         List<Product> products = new ArrayList<>();
         products.add(product);
         Order currentOrder = orderService.findActiveOrderOrCreateDefault(OrderStatus.ACTIVE, user.getId()).stream().findFirst().get();
 
-        System.out.println(currentOrder.getOrderName());
         orderService.addProductToOrder(currentOrder, products, user, 1, product.getItemPrice());
         return "redirect:/catalog";
     }

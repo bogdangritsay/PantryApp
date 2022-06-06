@@ -65,6 +65,11 @@ public class Order {
         return dateOfSubmit.format(formatter);
    }
 
+    public String getDeliveryDateInSimpleFormat() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return deliveryDate.format(formatter);
+    }
+
 //    public Set<OrderItem> getOrderDetails() {
 //        return orderDetails;
 //    }

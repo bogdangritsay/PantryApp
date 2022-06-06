@@ -116,8 +116,7 @@ public class OrderController {
     @PostMapping(value = "/currentorder/edit/{id}")
     public String submitEditedProduct( @PathVariable Long id,
                                       @RequestParam  String orderPrice,
-                                      @RequestParam String orderAmount )
-    {
+                                      @RequestParam String orderAmount ) {
         Product editedProduct = productService.findById(id);
         if(null != editedProduct)
         {

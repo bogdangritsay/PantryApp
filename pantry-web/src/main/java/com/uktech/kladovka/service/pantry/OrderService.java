@@ -230,6 +230,10 @@ public class OrderService {
         return orderRepository.findOrderByOrderStatusAndUserId(orderStatus, userId);
     }
 
+    public Order findOrderById(Long id) {
+        return orderRepository.findOrderById(id);
+    }
+
     public void changeStatusAndSave(Order order, OrderStatus status) {
         order.setOrderStatus(status); // 4= delivered , moved to history
         saveOrder(order);

@@ -14,8 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -77,9 +76,13 @@ class RegistrationServiceTest {
         // Arrange
         String token = "valid-token";
         User user = new User();
-        ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(), LocalDateTime.now().plusDays(1), user);
+        LocalDateTime now = LocalDateTime.now();
+        ConfirmationToken confirmationToken = new ConfirmationToken(token, now, now.plusDays(1), user);
         when(confirmationTokenService.getToken(token)).thenReturn(confirmationToken);
-        when(confirmationTokenService.setConfirmedAt(token)).thenReturn(1);
+        when(confirmationTokenService.setConfirmedAt(token)).thenAnswer(invocation -> {
+            confirmationToken.setConfirmedAt(LocalDateTime.now());
+            return 1;
+        });
         when(userService.enableAppUser(confirmationToken.getUser().getEmail())).thenReturn(1);
 
         // Act

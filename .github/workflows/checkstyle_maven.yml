@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: ChechkJava CI with Maven
+name: CheckStyle and Java CI with Maven
 
 on:
   push:

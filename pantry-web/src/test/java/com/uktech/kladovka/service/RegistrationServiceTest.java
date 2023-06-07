@@ -43,16 +43,13 @@ class RegistrationServiceTest {
 
     @Test
     void testRegisterWithValidEmailShouldReturnToken() {
-        // Arrange
         User user = new User("John", "Doe", "Middle", "password", Role.USER,
                 "Address", "john.doe@example.com", "DefaultSite", "123456", "passwordConfirm", null);
         when(emailValidator.test(user.getEmail())).thenReturn(true);
         when(userService.signUpUser(any(User.class))).thenReturn("token");
 
-        // Act
         String token = registrationService.register(user);
 
-        // Assert
         assertNotNull(token);
         assertEquals("token", token);
         verify(emailSender, times(1)).sendEmail(anyString(), anyString(), anyString(), anyMap());
@@ -60,12 +57,10 @@ class RegistrationServiceTest {
 
     @Test
     void testRegisterWithInvalidEmailShouldThrowIllegalStateException() {
-        // Arrange
         User user = new User("John", "Doe", "Middle", "password", Role.USER,
                 "Address", "invalid-email", "DefaultSite", "123456", "passwordConfirm", null);
         when(emailValidator.test(user.getEmail())).thenReturn(false);
 
-        // Act & Assert
         assertThrows(IllegalStateException.class, () -> registrationService.register(user));
         verifyNoInteractions(userService);
         verifyNoInteractions(emailSender);
@@ -73,7 +68,6 @@ class RegistrationServiceTest {
 
     @Test
     void testConfirmTokenWithValidTokenShouldConfirmTokenAndEnableUser() {
-        // Arrange
         String token = "valid-token";
         User user = new User();
         LocalDateTime now = LocalDateTime.now();
@@ -85,37 +79,31 @@ class RegistrationServiceTest {
         });
         when(userService.enableAppUser(confirmationToken.getUser().getEmail())).thenReturn(1);
 
-        // Act
         assertDoesNotThrow(() -> registrationService.confirmToken(token));
 
-        // Assert
         assertNotNull(confirmationToken.getConfirmedAt());
         verify(userService, times(1)).enableAppUser(confirmationToken.getUser().getEmail());
     }
 
     @Test
     void testConfirmTokenWithAlreadyConfirmedTokenShouldThrowIllegalStateException() {
-        // Arrange
         String token = "already-confirmed-token";
         User user = new User();
         ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(), LocalDateTime.now().plusDays(1), user);
         confirmationToken.setConfirmedAt(LocalDateTime.now());
         when(confirmationTokenService.getToken(token)).thenReturn(confirmationToken);
 
-        // Act & Assert
         assertThrows(IllegalStateException.class, () -> registrationService.confirmToken(token));
         verifyNoInteractions(userService);
     }
 
     @Test
     void testConfirmTokenWithExpiredTokenShouldThrowIllegalStateException() {
-        // Arrange
         String token = "expired-token";
         User user = new User();
         ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(), LocalDateTime.now().minusDays(1), user);
         when(confirmationTokenService.getToken(token)).thenReturn(confirmationToken);
 
-        // Act & Assert
         assertThrows(IllegalStateException.class, () -> registrationService.confirmToken(token));
         verifyNoInteractions(userService);
     }

@@ -15,32 +15,21 @@ import javax.mail.internet.MimeMessage;
 
 import java.util.Map;
 
-
 @Service
 public class EmailService implements EmailSender {
-    private static final String FAILED_TO_SEND_EMAIL_MSG = "Failed to send email!";
-    private static final String FROM_EMAIL = "pantry.notifications@gmail.com";
-    private static final String EMAIL_TEMPLATE_FOLDER_PATH = "email_templates/";
-    private final static Logger log = LoggerFactory.getLogger(EmailService.class);
+    public static final String FAILED_TO_SEND_EMAIL_MSG = "Failed to send email!";
+    public static final String FROM_EMAIL = "pantry.notifications@gmail.com";
+    public static final String EMAIL_TEMPLATE_FOLDER_PATH = "email_templates/";
+    public final static Logger log = LoggerFactory.getLogger(EmailService.class);
 
     @Autowired
     private JavaMailSender emailSender;
     @Autowired
     Configuration freeMakerConfiguration;
 
-
     @Override
     @Async
     public void sendEmail(String toAddress, String subject, String templateName, Map<String, Object> model)  {
-        //TODO: can be usefull for sendings orders
-       /* MimeMessage mimeMessage = emailSender.createMimeMessage();
-        MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
-        messageHelper.setTo(toAddress);
-        messageHelper.setSubject(subject);
-        messageHelper.setText(message);
-        FileSystemResource file = new FileSystemResource(ResourceUtils.getFile(attachment));
-        messageHelper.addAttachment("Purchase Order", file);
-        emailSender.send(mimeMessage);*/
 
         try {
             MimeMessage mimeMessage = emailSender.createMimeMessage();
@@ -48,7 +37,7 @@ public class EmailService implements EmailSender {
             helper.setTo(toAddress);
             helper.setSubject(subject);
             helper.setFrom(FROM_EMAIL);
-            helper.setText(geContentFromTemplate(model, EMAIL_TEMPLATE_FOLDER_PATH + templateName), true);
+            helper.setText(getContentFromTemplate(model, EMAIL_TEMPLATE_FOLDER_PATH + templateName), true);
             emailSender.send(mimeMessage);
         } catch (MessagingException e) {
             log.error(FAILED_TO_SEND_EMAIL_MSG, e);
@@ -56,15 +45,15 @@ public class EmailService implements EmailSender {
         }
     }
 
-    public String geContentFromTemplate(Map<String, Object > model, String templatePath) {
-        StringBuffer content = new StringBuffer();
+    public String getContentFromTemplate(Map<String, Object > model, String templatePath) {
+        StringBuilder content = new StringBuilder();
 
         try {
             content.append(FreeMarkerTemplateUtils.processTemplateIntoString(freeMakerConfiguration.getTemplate(templatePath), model));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to process email template: " + templatePath, e);
+            throw new IllegalStateException("Failed to process email template: " + templatePath, e);
         }
         return content.toString();
     }
-
 }

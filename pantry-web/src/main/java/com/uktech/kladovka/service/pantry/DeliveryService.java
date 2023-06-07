@@ -1,8 +1,11 @@
 package com.uktech.kladovka.service.pantry;
 
 
-import com.uktech.pantry.domain.*;
-import com.uktech.pantry.repository.OrderDetailsRepository;
+import com.uktech.kladovka.model.domain.Order;
+import com.uktech.kladovka.model.domain.OrderStatus;
+import com.uktech.kladovka.model.domain.Pantry;
+import com.uktech.kladovka.model.domain.User;
+import com.uktech.kladovka.model.repository.OrderDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;

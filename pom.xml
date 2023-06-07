@@ -7,7 +7,6 @@
 
     <modules>
         <module>pantry-web</module>
-        <module>pantry-model</module>
     </modules>
 
     <parent>

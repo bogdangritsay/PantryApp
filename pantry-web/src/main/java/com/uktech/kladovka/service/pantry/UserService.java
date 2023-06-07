@@ -4,9 +4,9 @@ package com.uktech.kladovka.service.pantry;
 
 
 import com.uktech.kladovka.service.mail.token.ConfirmationTokenService;
-import com.uktech.pantry.domain.ConfirmationToken;
-import com.uktech.pantry.domain.User;
-import com.uktech.pantry.repository.UserRepository;
+import com.uktech.kladovka.model.domain.ConfirmationToken;
+import com.uktech.kladovka.model.domain.User;
+import com.uktech.kladovka.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

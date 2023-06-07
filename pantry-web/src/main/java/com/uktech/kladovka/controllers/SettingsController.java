@@ -1,7 +1,7 @@
 package com.uktech.kladovka.controllers;
 
 import com.uktech.kladovka.service.pantry.UserService;
-import com.uktech.pantry.domain.User;
+import com.uktech.kladovka.model.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

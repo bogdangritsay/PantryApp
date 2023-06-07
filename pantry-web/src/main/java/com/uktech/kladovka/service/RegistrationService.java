@@ -4,9 +4,9 @@ import com.uktech.kladovka.service.mail.EmailSender;
 import com.uktech.kladovka.service.mail.EmailValidator;
 import com.uktech.kladovka.service.mail.token.ConfirmationTokenService;
 import com.uktech.kladovka.service.pantry.UserService;
-import com.uktech.pantry.domain.ConfirmationToken;
-import com.uktech.pantry.domain.Role;
-import com.uktech.pantry.domain.User;
+import com.uktech.kladovka.model.domain.ConfirmationToken;
+import com.uktech.kladovka.model.domain.Role;
+import com.uktech.kladovka.model.domain.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

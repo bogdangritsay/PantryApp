@@ -2,10 +2,10 @@ package com.uktech.kladovka.service.pantry;
 
 
 
-import com.uktech.pantry.domain.Order;
-import com.uktech.pantry.domain.OrderItem;
-import com.uktech.pantry.domain.Product;
-import com.uktech.pantry.repository.OrderDetailsRepository;
+import com.uktech.kladovka.model.domain.Order;
+import com.uktech.kladovka.model.domain.OrderItem;
+import com.uktech.kladovka.model.domain.Product;
+import com.uktech.kladovka.model.repository.OrderDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

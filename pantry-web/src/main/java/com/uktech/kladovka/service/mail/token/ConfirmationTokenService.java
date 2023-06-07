@@ -1,7 +1,7 @@
 package com.uktech.kladovka.service.mail.token;
 
-import com.uktech.pantry.domain.ConfirmationToken;
-import com.uktech.pantry.repository.ConfirmationTokenRepository;
+import com.uktech.kladovka.model.domain.ConfirmationToken;
+import com.uktech.kladovka.model.repository.ConfirmationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,10 +1,10 @@
 package com.uktech.kladovka.controllers;
 
+import com.uktech.kladovka.model.domain.*;
 import com.uktech.kladovka.service.pantry.OrderItemService;
 import com.uktech.kladovka.service.pantry.OrderService;
 import com.uktech.kladovka.service.pantry.ProductService;
-import com.uktech.pantry.domain.*;
-import com.uktech.pantry.repository.ProductRepository;
+import com.uktech.kladovka.model.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -4,9 +4,9 @@ package com.uktech.kladovka.controllers;
 import com.uktech.kladovka.service.pantry.PantryService;
 import com.uktech.kladovka.service.pantry.ProductService;
 
-import com.uktech.pantry.domain.PantryItems;
-import com.uktech.pantry.domain.Product;
-import com.uktech.pantry.domain.User;
+import com.uktech.kladovka.model.domain.PantryItems;
+import com.uktech.kladovka.model.domain.Product;
+import com.uktech.kladovka.model.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

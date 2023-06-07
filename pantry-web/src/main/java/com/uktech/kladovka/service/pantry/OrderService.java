@@ -1,9 +1,9 @@
 package com.uktech.kladovka.service.pantry;
 
 
+import com.uktech.kladovka.model.domain.*;
 import com.uktech.kladovka.service.mail.EmailService;
-import com.uktech.pantry.domain.*;
-import com.uktech.pantry.repository.OrderRepository;
+import com.uktech.kladovka.model.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

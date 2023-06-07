@@ -1,8 +1,8 @@
 package com.uktech.kladovka.service.pantry;
 
 
-import com.uktech.pantry.domain.Product;
-import com.uktech.pantry.repository.ProductRepository;
+import com.uktech.kladovka.model.domain.Product;
+import com.uktech.kladovka.model.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

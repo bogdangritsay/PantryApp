@@ -43,6 +43,7 @@ public class RegistrationService {
             throw new IllegalStateException(EMAIL_NOT_VALID_MSG);
         }
 
+
         String token =  userService.signUpUser(
                 new User(
                         user.getFirstName(),
@@ -60,6 +61,9 @@ public class RegistrationService {
         )
         );
 
+        //TODO: remove this after record and play tests creation
+        userService.enableAppUser(user.getEmail());
+
         confirmationLink+= token;
         Map<String, Object> model = new HashMap<>();
         model.put("name", user.getFirstName());
@@ -76,6 +80,7 @@ public class RegistrationService {
 
     @Transactional
     public void  confirmToken(String token) {
+        //TODO: uncomment this after record and play tests creating
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token);
 
         if (confirmationToken.getConfirmedAt() != null) {
